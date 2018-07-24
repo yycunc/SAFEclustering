@@ -7,8 +7,11 @@ July 24, 2018
   + First offical release
 
 ## SAFEclustering Examples
+### Setup the library
+```{r setup for Zheng dataset}
 library("SAFEclustering")
 data("data_SAFE")
+```
 
 ### Zheng dataset
 #### Setup the input expression matrix
