@@ -1,7 +1,7 @@
 # SAFEclustering
 SAFE (Single-cell Aggregated clustering From Ensemble): Cluster ensemble for single-cell RNA-seq data
 
-SAFEclustering is maintained by Yuchen Yang 
+SAFEclustering is maintained by Yuchen Yang [yyuchen@email.unc.edu]
 
 ## News and Updates
 July 24, 2018
@@ -19,7 +19,7 @@ devtools::install_github("yycunc/SAFEclustering")
 Note that hypergraph partitioning algorithm (HGPA) is performed using the *shmetis* program (from the hMETIS package v. 1.5 (Karypis *et al.*, IEEE Transactions on Very Large Scale Integration (VLSI) Systems, 1999)), and meta-clustering algorithm (MCLA) and cluster-based similarity partitioning algorithm (CSPA) are performed using *gpmetis* program (from METIS v. 5.1.0 (Karypis and Kumar, SIAM Journal on Scientific Computing, 1998)). Please download the two programs corresponding to the operating systems you are using and put them in the working directory or provide the directory where these two programs are.
 
 ## SAFEclustering Examples
-Here we will provide examples using two datasets: one from Zheng *et al.*, (Nature Communications, 2016) and the other from Biase *et al.*, (Genome Research, 2014). Zheng dataset contains 500 human peripheral blood mononuclear cells (PBMCs) sequenced using GemCode platform, which consists of three cell types, CD56+ natural killer cells, CD19+ B cells and CD4+/CD25+ regulatory T cells. The original data can be downloaded from 10X GENOMICS website. The Biase dataset has 49 mouse embryo cells, which were sequenced by SMART-Seq and can be found at NCBI GEO:GSE57249.
+Here we will provide examples using two datasets: one from Zheng *et al.*, (Nature Communications, 2016) and the other from Biase *et al.*, (Genome Research, 2014). Zheng dataset contains 500 human peripheral blood mononuclear cells (PBMCs) sequenced using GemCode platform, which consists of three cell types, CD56+ natural killer cells, CD19+ B cells and CD4+/CD25+ regulatory T cells. The original data can be downloaded from [10X GENOMICS website](https://support.10xgenomics.com/single-cell-gene-expression/datasets). The Biase dataset has 49 mouse embryo cells, which were sequenced by SMART-Seq and can be found at [NCBI GEO:GSE57249](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE57249).
 
 ### Load the data
 ```{r setup for Zheng dataset}
