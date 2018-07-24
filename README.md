@@ -1,10 +1,13 @@
 # SAFEclustering
 SAFE (Single-cell Aggregated clustering From Ensemble): Cluster ensemble for single-cell RNA-seq data
 
+SAFEclustering is maintained by Yuchen Yang 
+
 ## News and Updates
 July 24, 2018
 * Version 0.99.0 released
   + First offical release
+  + Now it can only work on Mac and Linux platform
 
 ## Installation
 You can install SAFEclustering from github with:
