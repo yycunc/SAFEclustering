@@ -13,6 +13,7 @@ install.packages("devtools)
 
 devtools::install_github("yycunc/SAFEclustering")
 ```
+Note that HGPA is performed using the shmetis program (from the hMETIS package v. 1.5 (Karypis et al., IEEE Transactions on Very Large Scale Integration (VLSI) Systems, 1999)), and MCLA and CSPA are performed using gpmetis program (from METIS v. 5.1.0 (Karypis and Kumar, SIAM Journal on Scientific Computing, 1998)). Please download the two programs corresponding to the operating systems you are using and put them in the working directory or provide the directory where these two programs are.
 
 ## SAFEclustering Examples
 ### Load the data
