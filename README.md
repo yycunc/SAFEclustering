@@ -6,19 +6,19 @@ July 24, 2018
 * Version 0.99.0 released
   + First offical release
 
-## SAFEclustering Examples
-### Load the data
-```{r setup for Zheng dataset}
-library("SAFEclustering")
-data("data_SAFE")
-```
-
 ## Installation
 You can install SAFEclustering from github with:
 ```{r install}
 install.packages("devtools)
 
 devtools::install_github("SAFEclustering")
+```
+
+## SAFEclustering Examples
+### Load the data
+```{r setup for Zheng dataset}
+library("SAFEclustering")
+data("data_SAFE")
 ```
 
 ### Zheng dataset
