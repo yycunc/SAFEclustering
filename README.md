@@ -42,7 +42,7 @@ nPC.cidr = NULL, Seurat = TRUE, nPC.seurat = NULL, resolution = 0.9, tSNE = TRUE
 perplexity = 30, SEED = 123)
 ```
 
-The function *indiviual_clustering* will output a matrix, where each row represents the cluster results of each method, and each colunm represents a cell. User can also extend SAFE-clustering to other scRNA-seq clustering methods, by putting all clustering results into a $M * N$ matrix with M clustering methods and N cells.
+The function *indiviual_clustering* will output a matrix, where each row represents the cluster results of each method, and each colunm represents a cell. User can also extend SAFE-clustering to other scRNA-seq clustering methods, by putting all clustering results into a M * N matrix with M clustering methods and N cells.
 
 ```{r, message=FALSE}
 cluster.results[1:4, 1:10]
