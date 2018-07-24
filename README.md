@@ -1,14 +1,6 @@
 # SAFEclustering
 SAFE (Single-cell Aggregated clustering From Ensemble): Cluster ensemble for single-cell RNA-seq data
 
-## Installation
-You can install SAFEclustering from github with:
-```{r install}
-install.packages("devtools)
-
-devtools::install_github("SAFEclustering")
-```
-
 ## News and Updates
 July 24, 2018
 * Version 0.99.0 released
@@ -19,6 +11,14 @@ July 24, 2018
 ```{r setup for Zheng dataset}
 library("SAFEclustering")
 data("data_SAFE")
+```
+
+## Installation
+You can install SAFEclustering from github with:
+```{r install}
+install.packages("devtools)
+
+devtools::install_github("SAFEclustering")
 ```
 
 ### Zheng dataset
