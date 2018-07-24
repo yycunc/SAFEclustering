@@ -1,6 +1,11 @@
 # SAFEclustering
 SAFE (Single-cell Aggregated clustering From Ensemble): Cluster ensemble for single-cell RNA-seq data
 
+## News and Updates
+July 24, 2018
+* Version 0.99.0 released
+  + First offical release
+
 ## SAFEclustering Examples
 library("SAFEclustering")
 data("data_SAFE")
