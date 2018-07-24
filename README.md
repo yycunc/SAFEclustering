@@ -11,7 +11,7 @@ You can install SAFEclustering from github with:
 ```{r install}
 install.packages("devtools)
 
-devtools::install_github("SAFEclustering")
+devtools::install_github("yycunc/SAFEclustering")
 ```
 
 ## SAFEclustering Examples
