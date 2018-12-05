@@ -13,7 +13,8 @@ July 24, 2018
 
 Dec 5, 2018
 * Version 1.00.1 released
-  + Fixed an error in Seurat clustering to allow more than 20 PCs computed
+  + Fixing an error in Seurat clustering to allow more than 20 PCs computed
+  + Fixing an error in tSNE + *k*-means clustering when specifying the maximum value of the pool of cluster numbers
   
 ## Installation
 You can install SAFEclustering from github with:
