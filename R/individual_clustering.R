@@ -113,7 +113,11 @@ seurat_SAFE <- function(inputTags, datatype, nPC.seurat, resolution, seurat_min_
     seuratOUTPUT <- ScaleData(object = seuratOUTPUT, vars.to.regress = c("nUMI"))
 
     ### Perform linear dimensional reduction
-    seuratOUTPUT <- RunPCA(object = seuratOUTPUT, pc.genes = seuratOUTPUT@var.genes, do.print = FALSE)
+    if (nPC.seurat <= 20){
+        seuratOUTPUT <- RunPCA(object = seuratOUTPUT, pc.genes = seuratOUTPUT@var.genes, do.print = FALSE)
+    } else {
+        seuratOUTPUT <- RunPCA(object = seuratOUTPUT, pc.genes = seuratOUTPUT@var.genes, pcs.compute = nPC.seurat, do.print = FALSE)
+    }
 
     if (length(inputTags[1,]) >= seurat_min_cell){
         ### Determine statistically significant principal components
