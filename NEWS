@@ -7,4 +7,5 @@ SAFEclustering 0.99.0 (Release date: 2018-07-24):
 
 SAFEclustering 1.00.1 (Release date: 2018-12-05):
 
-    * Fixed an error in Seurat clustering to allow more than 20 PCs computed
+    * Fixing an error in Seurat clustering to allow more than 20 PCs computed
+    * Fixing an error in tSNE + k-means clustering when specifying the maximum value of the pool of cluster numbers
