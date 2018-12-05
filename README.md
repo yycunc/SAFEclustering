@@ -12,7 +12,7 @@ July 24, 2018
   + Now it can only work on Mac and Linux platform
 
 Dec 5, 2018
-* Version 1.00.0 released
+* Version 1.00.1 released
   + Fixed an error in Seurat clustering to allow more than 20 PCs computed
   
 ## Installation
