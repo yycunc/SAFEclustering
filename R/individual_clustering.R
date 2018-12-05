@@ -346,7 +346,7 @@ individual_clustering <- function(inputTags, datatype = "count", mt_filter = FAL
         }
 
         tsne_kmeansOUTPUT <- tSNE_kmeans_SAFE(inputTags = inputTags, datatype = datatype, saver = saver, dimensions = dimensions,
-                                            perplexity = perplexity, k.min = 2, k.max = cluster_number, var_genes = var_genes, SEED = SEED)
+                                            perplexity = perplexity, k.min = 2, k.max = max(cluster_number), var_genes = var_genes, SEED = SEED)
         cluster_results = rbind(cluster_results, matrix(c(tsne_kmeansOUTPUT$cluster), nrow = 1, byrow = TRUE))
     }
 
