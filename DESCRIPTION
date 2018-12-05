@@ -1,7 +1,7 @@
 Package: SAFEclustering
 Type: Package
 Title: SAFE-clustering:Single-cell Aggregated (From Ensemble) Clustering for Single-cell RNA-seq Data
-Version: 0.99.0
+Version: 1.00.0
 Authors@R: c(person("Yuchen", "Yang", email = "yangyuchensysu@gmail.com", role = c("aut", "cre")),
              person("Ruth", "Huh", email = "rhuh@live.unc.edu", role = c("aut")),
              person("Yun", "Li", email = "yunli@med.unc.edu", role = c("aut")))
