@@ -3,7 +3,7 @@ SAFE (Single-cell Aggregated clustering From Ensemble): Cluster ensemble for sin
 
 Although several methods have been recently developed for clustering cell types using single-cell RNA-seq (scRNA-Seq) data, they utilize different characteristics of data and yield varying results in terms of both the number of clusters and actual cluster assignments. Here, we present SAFE-clustering, Single-cell Aggregated (From Ensemble) clustering, a flexible, accurate and robust method for clustering scRNA-Seq data. SAFE-clustering takes as input, results from multiple clustering methods, to build one consensus solution. SAFE-clustering currently embeds four state-of-the-art methods, SC3, CIDR, Seurat and t-SNE + *k*-means; and ensembles solutions from these four methods using three hypergraph-based partitioning algorithms.
 
-SAFEclustering is maintained by Yuchen Yang [yyuchen@email.unc.edu] and Yun Li [yun_li@med.unc.edu].
+SAFEclustering is maintained by Yuchen Yang [yyuchen@email.unc.edu] and Yun Li [yunli@med.unc.edu].
 
 ## News and Updates
 July 24, 2018
