@@ -163,3 +163,6 @@ cluster.ensemble$MCLA_optimal_k
 
 ## Citation
 Yang, Y., Huh, R., Culpepper, H., Lin, Y., Love, M., Li, Y. (2019) SAFE-clustering: Single-cell Aggregated (From Ensemble) Clustering for Single-cell RNA-seq Data. *Bioinformatics*, 35: 1269-1277. [PMID: 30202935].
+
+## Credits
+Algorithms of MCLA, HGPA and CSPA are from Strehl and Ghosh (2002) . Some codes are paraphrased from the Matlab package of ClusterEnsemble-V2.0 (http://strehl.com/soft.html).
