@@ -192,7 +192,7 @@ tSNE_kmeans_SAFE <- function(inputTags, saver, dimensions, perplexity, k.min, k.
 #' @param high.genes defines a high cutoff of unique gene counts (Default is 8000) that cells having more than 8000 genes are filtered out, when \code{nGene_filter = TRUE}.
 #' @param nPC.seurat defines the number of principal components used in Seurat clustering, when \code{Seurat = TRUE}.
 #' Default is \code{nPC.seurat = nPC.cidr}.
-#' @param resolution defines the value of resolution used in Seurat clustering, when \code{Seurat = TRUE}. Default \code{resolution} is set to 0.7.
+#' @param resolution defines the value of resolution used in Seurat clustering, when \code{Seurat = TRUE}. Default is \code{resolution = 0.7}.
 #' @param tSNE is a boolean variable that defines whether to cluster cells using t-SNE method.
 #' Default is "TRUE".
 #' @param saver is a boolean variable that defines whether to revise the gene expression profile in noisy and sparse single-cell RNA-seq data for downstream tSNE analysis using SAVER method.
@@ -218,7 +218,7 @@ tSNE_kmeans_SAFE <- function(inputTags, saver, dimensions, perplexity, k.min, k.
 #' # Run individual_clustering
 #' cluster.result <- individual_clustering(inputTags=data_SAFE$Zheng.expr, SEED=123)
 #' @export
-individual_clustering <- function(inputTags, mt_filter = TRUE, mt.pattern = "^MT-", high.mt.cutoff = 0.1, 
+individual_clustering <- function(inputTags, mt_filter = TRUE, mt.pattern = "^MT-", mt.cutoff = 0.1, 
                                 SC3 = TRUE, gene_filter = FALSE, svm_num_cells = 5000, CIDR = TRUE, nPC.cidr = NULL,
                                 Seurat = TRUE, nGene_filter = TRUE, low.genes = 200, high.genes = 8000, nPC.seurat = NULL, resolution = 0.7, 
                                 tSNE = TRUE, saver = FALSE, dimensions = 3, perplexity = 30, tsne_min_cells = 200, tsne_min_perplexity = 10, var_genes = NULL,
