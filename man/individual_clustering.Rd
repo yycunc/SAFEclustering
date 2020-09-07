@@ -47,7 +47,7 @@ Default is "TRUE".}
 \item{nPC.seurat}{defines the number of principal components used in Seurat clustering, when \code{Seurat = TRUE}.
 Default is \code{nPC.seurat = nPC.cidr}.}
 
-\item{resolution}{defines the value of resolution used in Seurat clustering, when \code{Seurat = TRUE}.}
+\item{resolution}{defines the value of resolution used in Seurat clustering, when \code{Seurat = TRUE}. Default is \code{resolution = 0.7}.} 
 
 \item{tSNE}{is a boolean variable that defines whether to cluster cells using t-SNE method.
 Default is "TRUE".}
