@@ -1,11 +1,16 @@
 SAFEclustering News
 
-SAFEclustering 0.99.0 (Release date: 2018-07-24):
-
-    * First offical release
-    * Now it can only work on Mac and Linux platform
+SAFEclustering 2.00 (Release date: 2020-09-07):
+   
+   * The Seurat version used in SAFEclustering is updated to version 3. Seurat v.2 is no longer compatible
 
 SAFEclustering 1.00.1 (Release date: 2018-12-05):
 
     * Fixing an error in Seurat clustering to allow more than 20 PCs computed
     * Fixing an error in tSNE + k-means clustering when specifying the maximum value of the pool of cluster numbers
+
+SAFEclustering 0.99.0 (Release date: 2018-07-24):
+
+    * First offical release
+    * Now it can only work on Mac and Linux platform
+
