@@ -4,7 +4,7 @@
 \alias{individual_clustering}
 \title{Single-cell Aggregated clustering From Ensemble (SAFE)}
 \usage{
-individual_clustering(inputTags, mt_filter = TRUE, mt.cutoff = 0.1, 
+individual_clustering(inputTags, mt_filter = TRUE, mt.pattern = "^MT-", mt.cutoff = 0.1, 
   SC3 = TRUE, gene_filter = FALSE, svm_num_cells = 5000, CIDR = TRUE, nPC.cidr = NULL, 
   Seurat = TRUE, nGene_filter = TRUE, low.genes = 200, high.genes = 8000, nPC.seurat = NULL, resolution = 0.7,
   tSNE = TRUE, saver = FALSE, dimensions = 3, perplexity = 30, tsne_min_cells = 200, tsne_min_perplexity = 10,
