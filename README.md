@@ -6,16 +6,20 @@ Although several methods have been recently developed for clustering cell types 
 SAFEclustering is maintained by Yuchen Yang [yyuchen@email.unc.edu] and Yun Li [yunli@med.unc.edu].
 
 ## News and Updates
-July 24, 2018
-* Version 0.99.0 released
-  + First offical release
-  + Now it can only work on Mac and Linux platform
+Sep 7, 2020
+* Version 2.00 released
+  + The Seuart version used in SAFEclustering is updated to version 3. Seurat v.2 is no longer compatible
 
 Dec 5, 2018
 * Version 1.00.1 released
   + Fixing an error in Seurat clustering to allow more than 20 PCs computed
   + Fixing an error in tSNE + *k*-means clustering when specifying the maximum value of the pool of cluster numbers
   
+July 24, 2018
+* Version 0.99.0 released
+  + First offical release
+  + Now it can only work on Mac and Linux platform
+
 ## Installation
 You can install SAFEclustering from github with:
 ```{r install}
