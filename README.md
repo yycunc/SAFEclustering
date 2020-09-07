@@ -9,6 +9,7 @@ SAFEclustering is maintained by Yuchen Yang [yyuchen@email.unc.edu] and Yun Li [
 Sep 7, 2020
 * Version 2.00 released
   + The Seuart version used in SAFEclustering is updated to version 3. Seurat v.2 is no longer compatible
+  + Only count data is acceptable by SAFEclustering. Other formats, such as FPKM, CPM and RPKM are no longer compatible
 
 Dec 5, 2018
 * Version 1.00.1 released
@@ -30,7 +31,7 @@ devtools::install_github("yycunc/SAFEclustering")
 Note that hypergraph partitioning algorithm (HGPA) is performed using the *shmetis* program (from the hMETIS package v. 1.5 (Karypis *et al.*, IEEE Transactions on Very Large Scale Integration (VLSI) Systems, 1999)), and meta-clustering algorithm (MCLA) and cluster-based similarity partitioning algorithm (CSPA) are performed using *gpmetis* program (from METIS v. 5.1.0 (Karypis and Kumar, SIAM Journal on Scientific Computing, 1998)). Please download the two programs corresponding to the operating systems you are using and put them in the working directory or provide the directory where these two programs are.
 
 ## SAFEclustering Examples
-Here we provide examples using two datasets: one from Zheng *et al.*, (Nature Communications, 2016) and the other from Biase *et al.*, (Genome Research, 2014). Zheng dataset contains 500 human peripheral blood mononuclear cells (PBMCs) sequenced using GemCode platform, which consists of three cell types, CD56+ natural killer cells, CD19+ B cells and CD4+/CD25+ regulatory T cells. The original data can be downloaded from [10X GENOMICS website](https://support.10xgenomics.com/single-cell-gene-expression/datasets). The Biase dataset has 49 mouse embryo cells, which were sequenced by SMART-Seq and can be found at [NCBI GEO:GSE57249](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE57249).
+Here we provide one example using the dataset from Zheng *et al.*, (Nature Communications, 2016). Zheng dataset contains 500 human peripheral blood mononuclear cells (PBMCs) sequenced using GemCode platform, which consists of three cell types, CD56+ natural killer cells, CD19+ B cells and CD4+/CD25+ regulatory T cells. The original data can be downloaded from [10X GENOMICS website](https://support.10xgenomics.com/single-cell-gene-expression/datasets).
 
 ### Load the data
 ```{r setup for Zheng dataset}
@@ -50,9 +51,9 @@ data_SAFE$Zheng.expr[1:5, 1:5]
 Here we perform single-cell clustering using four popular methods, SC3, CIDR, Seurat and t-SNE + *k*-means, without filtering any genes or cells.
 
 ```{r individual clustering for Baron_human4 dataset, results='hide', fig.show="hide", warning=FALSE}
-cluster.results <- individual_clustering(inputTags = data_SAFE$Zheng.expr, datatype = "count", 
-mt_filter = FALSE, nGene_filter = FALSE, SC3 = TRUE, gene_filter = FALSE, CIDR = TRUE, 
-nPC.cidr = NULL, Seurat = TRUE, nPC.seurat = NULL, resolution = 0.9, tSNE = TRUE, dimensions = 3, 
+cluster.results <- individual_clustering(inputTags = data_SAFE$Zheng.expr, mt_filter = TRUE, 
+SC3 = TRUE, gene_filter = FALSE, CIDR = TRUE, nPC.cidr = NULL, 
+Seurat = TRUE, nGene_filter = FALSE, nPC.seurat = NULL, resolution = 0.7, tSNE = TRUE, dimensions = 3, 
 perplexity = 30, SEED = 123)
 ```
 
@@ -111,58 +112,6 @@ head(data_SAFE$Zheng.celltype)
 
 # Calculating ARI for cluster ensemble
 adjustedRandIndex(cluster.ensemble$optimal_clustering, data_SAFE$Zheng.celltype)
-```
-
-### Biase dataset
-
-#### Setup the input expression matrix
-```{r setup for Biase dataset}
-dim(data_SAFE$Biase.expr.expr)
-
-data_SAFE$Biase.expr[1:5, 1:5]
-```
-
-#### Perform individual clustering
-
-Here we perform single-cell clustering using four popular methods, SC3, CIDR, Seurat and t-SNE + *k*-means, without filtering any genes or cells. Since there are only 49 cells in Biase dataset, the resolution parameter is set to 1.2 according to our benchmarking results.
-
-```{r individual clustering for Biase dataset, results='hide', fig.show="hide", warning=FALSE}
-cluster.results <- individual_clustering(inputTags = data_SAFE$Biase.expr, datatype = "FPKM",  
-mt_filter = FALSE, nGene_filter = FALSE, SC3 = TRUE, gene_filter = FALSE, CIDR = TRUE, 
-nPC.cidr = NULL, Seurat = TRUE, nPC.seurat = NULL, seurat_min_cell = 200, resolution_min = 1.2, 
-tSNE = TRUE, dimensions = 3, tsne_min_cells = 200, tsne_min_perplexity = 10, SEED = 123)
-```
-
-#### Cluster ensemble
-
-Using the clustering results, we perform cluster ensemble using all the three partitioning algorithms MCLA, HGPA and CSPA.
-
-```{r cluster ensemble for Biase dataset, results='hide', message=FALSE}
-cluster.ensemble <- SAFE(cluster_results = cluster.results, program.dir = "~/Documents/single_cell_clustering", 
-MCLA = TRUE, CSPA = TRUE, HGPA = TRUE, SEED = 123)
-```
-
-Here is the list of ANMI results for esemble solution of each K and each partitioning algorithm.
-
-```{r}
-## [1] "HGPA partitioning at K = 2: 2 clusters at ANMI = 0.156896209024547"
-## [1] "HGPA partitioning at K = 3: 3 clusters at ANMI = 0.59768416631598"
-## [1] "HGPA partitioning at K = 4: 4 clusters at ANMI = 0.614176459706577"
-## [1] "MCLA partitioning at K = 2: 2 clusters at ANMI = 0.784102309002763"
-## [1] "MCLA partitioning at K = 3: 3 clusters at ANMI = 0.970539568368452"
-## [1] "MCLA partitioning at K = 4: 4 clusters at ANMI = 0.971666531448806"
-## [1] "CSPA partitioning at K = 2: 2 clusters at ANMI = 0.601004834004939"
-## [1] "CSPA partitioning at K = 3: 3 clusters at ANMI = 0.622097187347639"
-## [1] "CSPA partitioning at K = 4: 4 clusters at ANMI = 0.590251500201678"
-## [1] "Optimal number of clusters is 4 with ANMI = 0.971666531448806"
-```
-
-```{r ensemble results for Biase dataset, message=FALSE}
-cluster.ensemble$Summary
-
-cluster.ensemble$MCLA[1:10]
-
-cluster.ensemble$MCLA_optimal_k
 ```
 
 ## Citation
