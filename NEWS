@@ -3,6 +3,7 @@ SAFEclustering News
 SAFEclustering 2.00 (Release date: 2020-09-07):
    
    * The Seurat version used in SAFEclustering is updated to version 3. Seurat v.2 is no longer compatible
+   * Only count data is acceptable by SAFEclustering. Other formats, such as FPKM, CPM and RPKM are no longer compatible
 
 SAFEclustering 1.00.1 (Release date: 2018-12-05):
 
