@@ -81,7 +81,7 @@ seurat_SAFE <- function(inputTags, nPC.seurat, resolution, seurat_min_cell, reso
 
     # Initialize the Seurat object with the raw data (non-normalized data)
     # Keep all genes expressed in >= 3 cells, keep all cells with >= 200 genes
-    seuratOUTPUT <- CreateSeuratObject(counts = inputTags, min.cells = 3, min.features = low.genes, project = "single-cell clustering")
+    seuratOUTPUT <- CreateSeuratObject(counts = inputTags, min.cells = 0, min.features = low.genes, project = "single-cell clustering")
     
     # Detection of variable genes across the single cells
     if (nGene_filter == TRUE){
@@ -175,11 +175,10 @@ tSNE_kmeans_SAFE <- function(inputTags, saver, dimensions, perplexity, k.min, k.
 #' Default is "TRUE".
 #' @param mt.pattern defines the pattern of mitochondrial gene names in the data, for example, \code{mt.pattern = "^MT-"} for human and \code{mt.pattern = "^mt-"} for mouse.
 #' Default is \code{mt.pattern = "^MT-"}.
-#' @param mt.cutoff defines a low cutoff of mitochondrial percentage (Default is 10%) that cells having lower percentage of mitochondrial gene are filtered out, when \code{mt_filter = TRUE}.
+#' @param mt.cutoff defines a high cutoff of mitochondrial percentage (Default is 10%) that cells having lower percentage of mitochondrial gene are filtered out, when \code{mt_filter = TRUE}.
 #' @param SC3 a boolean variable that defines whether to cluster cells using SC3 method.
 #' Default is "TRUE".
-#' @param gene_filter a boolean variable defines whether to perform gene filtering before SC3 clustering
-#' before SC3 clustering, when \code{SC3 = TRUE}.
+#' @param gene_filter a boolean variable defines whether to perform gene filtering before SC3 clustering, when \code{SC3 = TRUE}.
 #' @param svm_num_cells, if \code{SC3 = TRUE}, then defines the mimimum number of cells above which SVM will be run.
 #' @param CIDR a boolean parameter that defines whether to cluster cells using CIDR method.
 #' Default is "TRUE".
@@ -219,7 +218,7 @@ tSNE_kmeans_SAFE <- function(inputTags, saver, dimensions, perplexity, k.min, k.
 #' # Run individual_clustering
 #' cluster.result <- individual_clustering(inputTags=data_SAFE$Zheng.expr, SEED=123)
 #' @export
-individual_clustering <- function(inputTags, mt_filter = TRUE, high.mt.cutoff = 0.1, 
+individual_clustering <- function(inputTags, mt_filter = TRUE, mt.pattern = "^MT-", high.mt.cutoff = 0.1, 
                                 SC3 = TRUE, gene_filter = FALSE, svm_num_cells = 5000, CIDR = TRUE, nPC.cidr = NULL,
                                 Seurat = TRUE, nGene_filter = TRUE, low.genes = 200, high.genes = 8000, nPC.seurat = NULL, resolution = 0.7, 
                                 tSNE = TRUE, saver = FALSE, dimensions = 3, perplexity = 30, tsne_min_cells = 200, tsne_min_perplexity = 10, var_genes = NULL,
@@ -234,12 +233,6 @@ individual_clustering <- function(inputTags, mt_filter = TRUE, high.mt.cutoff = 
         mito.genes <- grep(pattern = mt.pattern, x = rownames(x = inputTags), value = TRUE)
         percent.mito <- Matrix::colSums(inputTags[mito.genes, ])/Matrix::colSums(inputTags)
         inputTags <- inputTags[,which(percent.mito <= mt.cutoff)]
-    }
-
-    # Filter out cells that have unique gene counts over 2,500 or less than 200
-    if (nGene_filter == TRUE){
-        nGene <- colSums(inputTags > 0)
-        inputTags <- inputTags[,which(nGene >= low.genes & nGene <= high.genes)]
     }
 
     ##### SC3
