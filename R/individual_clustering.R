@@ -92,7 +92,10 @@ seurat_SAFE <- function(inputTags, datatype, nPC.seurat, resolution, seurat_min_
 
     # Initialize the Seurat object with the raw data (non-normalized data)
     # Keep all genes expressed in >= 3 cells, keep all cells with >= 200 genes
-    seuratOUTPUT <- CreateSeuratObject(raw.data = inputTags, min.cells = 3, min.genes = 200, project = "single-cell clustering")
+    seuratOUTPUT <- CreateSeuratObject(counts = inputTags, min.cells = 3, min.features = 200, project = "single-cell clustering")
+    
+    # Detection of variable genes across the single cells
+    seuratOUTPUT <- subset(object = seuratOUTPUT, subset = nFeature_RNA > 200 & nFeature_RNA < 8000)
 
     # Perform log-normalization, first scaling each cell to a total of 1e4 molecules (as in Macosko et al. Cell 2015)
     if (datatype == "count"){
@@ -106,49 +109,24 @@ seurat_SAFE <- function(inputTags, datatype, nPC.seurat, resolution, seurat_min_
     }
 
     # Detection of variable genes across the single cells
-    seuratOUTPUT = FindVariableGenes(object = seuratOUTPUT, mean.function = ExpMean, dispersion.function = LogVMR,
-                                    x.low.cutoff = 0.0125, x.high.cutoff = 3, y.cutoff = 0.5)
+    seuratOUTPUT <- FindVariableFeatures(object = seuratOUTPUT, selection.method = "vst", nfeatures = 2000)
 
-    # Regress out unwanted sources of variation
-    seuratOUTPUT <- ScaleData(object = seuratOUTPUT, vars.to.regress = c("nUMI"))
+    # Scale data
+    all.genes <- rownames(seuratOUTPUT)
+    seuratOUTPUT <- ScaleData(seuratOUTPUT, features = all.genes)
 
     ### Perform linear dimensional reduction
     if (nPC.seurat <= 20){
-        seuratOUTPUT <- RunPCA(object = seuratOUTPUT, pc.genes = seuratOUTPUT@var.genes, do.print = FALSE)
+        seuratOUTPUT <- RunPCA(object = seuratOUTPUT, features = variableFeatures(object = seuratOUTPUT), npcs = 20, seed.use = SEED, verbose = F)
+        seuratOUTPUT <- FindNeighbors(seuratOUTPUT, dims = 1:20, verbose = F)
     } else {
-        seuratOUTPUT <- RunPCA(object = seuratOUTPUT, pc.genes = seuratOUTPUT@var.genes, pcs.compute = nPC.seurat, do.print = FALSE)
+        seuratOUTPUT <- RunPCA(object = seuratOUTPUT, features = variableFeatures(object = seuratOUTPUT), npcs = nPC.seurat, seed.use = SEED, verbose = F)
+        seuratOUTPUT <- FindNeighbors(seuratOUTPUT, dims = 1:nPC.seurat, verbose = F)
     }
-
-    if (length(inputTags[1,]) >= seurat_min_cell){
-        ### Determine statistically significant principal components
-        # NOTE: This process can take a long time for big datasets, comment out for expediency.
-        # More approximate techniques such as those implemented in PCElbowPlot() can be used to reduce computation time
-        # Here we chooes the same number of PCs used in CIDR
-
-        ### Clustering the cells by Seurat
-        seuratOUTPUT <- FindClusters(object = seuratOUTPUT, reduction.type = "pca", dims.use = 1:nPC.seurat, algorithm = 3,
-                                    resolution = resolution, print.output = FALSE, random.seed = SEED)
-    } else {
-        resolution <- resolution_min
-        seuratOUTPUT <- FindClusters(object = seuratOUTPUT, reduction.type = "pca", dims.use = 1:nPC.seurat, algorithm = 3,
-                                    resolution = resolution_min, print.output = FALSE, random.seed = SEED)
-    }
-
-    ### Complementing the missing data
-    cells_dropout <- NULL
-    num_genes <- colSums(inputTags > 0)
-    cells_dropout <- names(num_genes[which(num_genes <= 200)])
-    if (length(cells_dropout != 0)){
-        seurat_output <- matrix(NA, ncol = ncol(inputTags), byrow = TRUE)
-        colnames(seurat_output) <- colnames(inputTags)
-        seurat_retained <- t(as.matrix(as.numeric(seuratOUTPUT@ident)))
-        colnames(seurat_retained) <- colnames(seuratOUTPUT@data)
-        for (i in 1:ncol(seurat_retained)){
-            seurat_output[1,colnames(seurat_retained)[i]] <- seurat_retained[1,colnames(seurat_retained)[i]]
-        }
-    } else {
-        seurat_output <- t(as.matrix(as.numeric(seuratOUTPUT@ident)))
-    }
+    
+    seuratOUTPUT <- FindClusters(seuratOUTPUT, resolution = resolution, verbose = F)
+    
+    seurat_output <- t(as.matrix(as.numeric(seuratOUTPUT@active.ident)))
 
     return(seurat_output)
 }
@@ -219,6 +197,8 @@ tSNE_kmeans_SAFE <- function(inputTags, datatype, saver, dimensions, perplexity,
 #' Default is "count".
 #' @param mt_filter is a boolean variable that defines whether to filter outlier cells according to mitochondrial gene percentage.
 #' Default is "FALSE".
+#' @param mt.pattern defines the pattern of mitochondrial gene names in the data, for example, \code{mt.pattern = "^MT-"} for human and \code{mt.pattern = "^mt-"} for mouse.
+#' Default is "FALSE".
 #' @param low.mt defines a low cutoff of mitochondrial percentage (Default is -Inf) that cells having lower percentage of mitochondrial gene are filtered out, when \code{mt_filter = TRUE}.
 #' @param high.mt defines a high cutoff of mitochondrial percentage (Default is 0.05) that cells having higher percentage of mitochondrial gene are filtered out, when \code{mt_filter = TRUE}.
 #' @param nGene_filter is a boolean variable that defines whether to filter outlier cells according to unique gene count.
@@ -238,11 +218,7 @@ tSNE_kmeans_SAFE <- function(inputTags, datatype, saver, dimensions, perplexity,
 #' Default is "TRUE".
 #' @param nPC.seurat defines the number of principal components used in Seurat clustering, when \code{Seurat = TRUE}.
 #' Default is \code{nPC.seurat = nPC.cidr}.
-#' @param resolution defines the value of resolution used in Seurat clustering, when \code{Seurat = TRUE}.
-#' @param seurat_min_cell defines the mimimum number of cells in input dataset below which
-#' \code{resolution} is set to 1.2, when \code{Seurat = TRUE}.
-#' @param resolution_min defines the resolution used in Seurat clustering for small dataset,
-#' when \code{Seurat == TRUE} and cell number of input file < \code{seurat_min_cell}.
+#' @param resolution defines the value of resolution used in Seurat clustering, when \code{Seurat = TRUE}. Default \code{resolution} is set to 0.7.
 #' @param tSNE is a boolean variable that defines whether to cluster cells using t-SNE method.
 #' Default is "TRUE".
 #' @param saver is a boolean variable that defines whether to revise the gene expression profile in noisy and sparse single-cell RNA-seq data for downstream tSNE analysis using SAVER method.
@@ -272,7 +248,7 @@ tSNE_kmeans_SAFE <- function(inputTags, datatype, saver, dimensions, perplexity,
 #' # Run individual_clustering
 #' cluster.result <- individual_clustering(inputTags = data_SAFE$Biase.expr, datatype = "FPKM", seurat_min_cell = 200, resolution_min = 1.2, tsne_min_cells = 200, tsne_min_perplexity = 10, SEED=123)
 #' @export
-individual_clustering <- function(inputTags, datatype = "count", mt_filter = FALSE, low.mt = -Inf, high.mt = 0.05, nGene_filter = FALSE, low.genes = 200, high.genes = 2500,
+individual_clustering <- function(inputTags, datatype = "count", mt_filter = FALSE, low.mt = -Inf, high.mt = 0.05, nGene_filter = FALSE, low.genes = 200, high.genes = 8000,
                                 SC3 = TRUE, gene_filter = FALSE, svm_num_cells = 5000, CIDR = TRUE, nPC.cidr = NULL,
                                 Seurat = TRUE, nPC.seurat = NULL, resolution = 0.9, seurat_min_cell = 200, resolution_min = 1.2,
                                 tSNE = TRUE, saver = FALSE, dimensions = 3, perplexity = 30, tsne_min_cells = 200, tsne_min_perplexity = 10, var_genes = NULL,
@@ -284,7 +260,7 @@ individual_clustering <- function(inputTags, datatype = "count", mt_filter = FAL
 
     # Filter out cells that have mitochondrial genes percentage over 5%
     if (mt_filter == TRUE){
-        mito.genes <- grep(pattern = "MT-", x = rownames(x = inputTags), value = TRUE)
+        mito.genes <- grep(pattern = mt.pattern, x = rownames(x = inputTags), value = TRUE)
         percent.mito <- Matrix::colSums(inputTags[mito.genes, ])/Matrix::colSums(inputTags)
         inputTags <- inputTags[,which(percent.mito >= low.mt & percent.mito <= high.mt)]
     }
@@ -329,8 +305,7 @@ individual_clustering <- function(inputTags, datatype = "count", mt_filter = FAL
             nPC.seurat <- nPC.cidr
         }
 
-        seurat_output <- seurat_SAFE(inputTags = inputTags, datatype = datatype, nPC.seurat = nPC.seurat, resolution = resolution,
-                                    seurat_min_cell = seurat_min_cell, resolution_min = resolution_min, SEED = SEED)
+        seurat_output <- seurat_SAFE(inputTags = inputTags, datatype = datatype, nPC.seurat = nPC.seurat, resolution = resolution, SEED = SEED)
         cluster_results <- rbind(cluster_results, matrix(c(seurat_output), nrow = 1, byrow = TRUE))
         cluster_number <- c(cluster_number, max(!is.na(seurat_output)))
     }
