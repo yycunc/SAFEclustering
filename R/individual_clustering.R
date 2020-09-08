@@ -76,7 +76,7 @@ cidr_SAFE <- function(inputTags, nPC.cidr, SEED){
 #' @import dplyr
 #' @import Matrix
 #' @importFrom methods .hasSlot
-seurat_SAFE <- function(inputTags, nPC.seurat, low.genes, high.genes, resolution, SEED){
+seurat_SAFE <- function(inputTags, nGene_filter = TRUE, low.genes, high.genes, nPC.seurat, resolution, SEED){
     seuratOUTPUT <- NULL
 
     # Initialize the Seurat object with the raw data (non-normalized data)
@@ -269,8 +269,8 @@ individual_clustering <- function(inputTags, mt_filter = TRUE, mt.pattern = "^MT
             nPC.seurat <- nPC.cidr
         }
 
-        seurat_output <- seurat_SAFE(inputTags = inputTags, nPC.seurat = nPC.seurat, low.genes = low.genes, high.genes = high.genes, 
-                                     resolution = resolution, SEED = SEED)
+        seurat_output <- seurat_SAFE(inputTags = inputTags, nGene_filter = nGene_filter, low.genes = low.genes, high.genes = high.genes, 
+                                     nPC.seurat = nPC.seurat, resolution = resolution, SEED = SEED)
         cluster_results <- rbind(cluster_results, matrix(c(seurat_output), nrow = 1, byrow = TRUE))
         cluster_number <- c(cluster_number, max(!is.na(seurat_output)))
     }
