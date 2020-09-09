@@ -100,10 +100,10 @@ seurat_SAFE <- function(inputTags, nGene_filter = TRUE, low.genes, high.genes, n
 
     ### Perform linear dimensional reduction
     if (nPC.seurat <= 20){
-        seuratOUTPUT <- RunPCA(object = seuratOUTPUT, features = variableFeatures(object = seuratOUTPUT), npcs = 20, seed.use = SEED, verbose = F)
+        seuratOUTPUT <- RunPCA(object = seuratOUTPUT, features = VariableFeatures(object = seuratOUTPUT), npcs = 20, seed.use = SEED, verbose = F)
         seuratOUTPUT <- FindNeighbors(seuratOUTPUT, dims = 1:20, verbose = F)
     } else {
-        seuratOUTPUT <- RunPCA(object = seuratOUTPUT, features = variableFeatures(object = seuratOUTPUT), npcs = nPC.seurat, seed.use = SEED, verbose = F)
+        seuratOUTPUT <- RunPCA(object = seuratOUTPUT, features = VariableFeatures(object = seuratOUTPUT), npcs = nPC.seurat, seed.use = SEED, verbose = F)
         seuratOUTPUT <- FindNeighbors(seuratOUTPUT, dims = 1:nPC.seurat, verbose = F)
     }
     
