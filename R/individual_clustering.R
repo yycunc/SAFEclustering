@@ -175,7 +175,7 @@ tSNE_kmeans_SAFE <- function(inputTags, saver, dimensions, perplexity, k.min, k.
 #' Default is "TRUE".
 #' @param mt.pattern defines the pattern of mitochondrial gene names in the data, for example, \code{mt.pattern = "^MT-"} for human and \code{mt.pattern = "^mt-"} for mouse.
 #' Default is \code{mt.pattern = "^MT-"}.
-#' @param mt.cutoff defines a high cutoff of mitochondrial percentage (Default is 10%) that cells having lower percentage of mitochondrial gene are filtered out, when \code{mt_filter = TRUE}.
+#' @param mt.cutoff defines a high cutoff of mitochondrial percentage (Default is 10%) that cells having higher percentage of mitochondrial gene are filtered out, when \code{mt_filter = TRUE}.
 #' @param SC3 a boolean variable that defines whether to cluster cells using SC3 method.
 #' Default is "TRUE".
 #' @param gene_filter a boolean variable defines whether to perform gene filtering before SC3 clustering, when \code{SC3 = TRUE}.
