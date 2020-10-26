@@ -109,7 +109,18 @@ seurat_SAFE <- function(inputTags, nGene_filter = TRUE, low.genes, high.genes, n
     
     seuratOUTPUT <- FindClusters(seuratOUTPUT, resolution = resolution, verbose = F)
     
-    seurat_output <- t(as.matrix(as.numeric(seuratOUTPUT@active.ident)))
+    ### Complementing the missing data
+    if (length(seuratOUTPUT@active.ident) < ncol(inputTags)){
+      seurat_output <- matrix(NA, ncol = ncol(inputTags), byrow = T)
+      colnames(seurat_output) <- colnames(inputTags)
+      seurat_retained <- t(as.matrix(as.numeric(seuratOUTPUT@active.ident)))
+      colnames(seurat_retained) <- names(seuratOUTPUT@active.ident)
+      for (i in 1:ncol(seurat_retained)){
+        seurat_output[1,colnames(seurat_retained)[i]] <- seurat_retained[1,colnames(seurat_retained)[i]]
+      }
+    } else {
+      seurat_output <- t(as.matrix(as.numeric(seuratOUTPUT@active.ident)))
+    }
 
     return(seurat_output)
 }
