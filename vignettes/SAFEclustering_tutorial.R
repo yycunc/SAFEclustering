@@ -13,7 +13,7 @@ data_SAFE$Zheng.expr[1:5, 1:5]
 
 ## ----results='hide', fig.show="hide", warning=FALSE------------------------
 # Perform individual clustering
-cluster.results <- individual_clustering(inputTags = data_SAFE$Zheng.expr, datatype = "count", mt_filter = FALSE, nGene_filter = FALSE, SC3 = TRUE, gene_filter = FALSE, CIDR = TRUE, nPC.cidr = NULL, Seurat = TRUE, nPC.seurat = NULL, resolution = 0.9, tSNE = TRUE, dimensions = 3, perplexity = 30, SEED = 123)
+cluster.results <- individual_clustering(inputTags = data_SAFE$Zheng.expr, mt_filter = TRUE, SC3 = TRUE, gene_filter = FALSE, CIDR = TRUE, nPC.cidr = NULL, Seurat = TRUE, nGene_filter = FALSE, nPC.seurat = NULL, resolution = 0.7, tSNE = TRUE, dimensions = 3, perplexity = 30, SEED = 123)
 ## ----message=FALSE---------------------------------------------------------
 cluster.results[1:4, 1:10]
 
