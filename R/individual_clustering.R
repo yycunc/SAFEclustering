@@ -81,7 +81,7 @@ seurat_SAFE <- function(inputTags, nGene_filter = TRUE, low.genes, high.genes, n
 
     # Initialize the Seurat object with the raw data (non-normalized data)
     # Keep all genes expressed in >= 3 cells, keep all cells with >= 200 genes
-    seuratOUTPUT <- CreateSeuratObject(counts = inputTags, min.cells = 0, min.features = low.genes, project = "single-cell clustering")
+    seuratOUTPUT <- CreateSeuratObject(counts = inputTags, min.cells = 0, min.features = 0, project = "single-cell clustering")
     
     # Detection of variable genes across the single cells
     if (nGene_filter == TRUE){
